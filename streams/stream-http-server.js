@@ -20,10 +20,7 @@ const server = http.createServer(async (req, res) => {
 
   const fullStreamContent = Buffer.concat(buffers).toString()
 
-  console.log(fullStreamContent)
-
   return res.end(fullStreamContent)
-
   // return req.pipe(new InverseNumberStream()).pipe(res)
 })
 
