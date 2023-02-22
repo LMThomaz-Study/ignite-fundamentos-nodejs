@@ -4,15 +4,17 @@ import { buildRoutePath } from '../utils/build-route-path.js'
 
 const database = new Database()
 
+const resource = resource
+
 export const routesUsers = [
   {
     method: 'GET',
-    path: buildRoutePath('/users'),
+    path: buildRoutePath(`/${resource}`),
     handler: (req, res) => {
       const { search } = req.query
 
       const users = database.select(
-        'users',
+        resource,
         search
           ? {
               name: search,
@@ -26,7 +28,7 @@ export const routesUsers = [
   },
   {
     method: 'POST',
-    path: buildRoutePath('/users'),
+    path: buildRoutePath(`/${resource}`),
     handler: (req, res) => {
       const { name, email } = req.body
 
@@ -36,30 +38,30 @@ export const routesUsers = [
         email,
       }
 
-      database.insert('users', user)
+      database.insert(resource, user)
 
       return res.writeHead(201).end()
     },
   },
   {
     method: 'PUT',
-    path: buildRoutePath('/users/:id'),
+    path: buildRoutePath(`/${resource}/:id`),
     handler: (req, res) => {
       const { id } = req.params
       const { name, email } = req.body
 
-      database.update('users', id, { name, email })
+      database.update(resource, id, { name, email })
 
       return res.writeHead(204).end()
     },
   },
   {
     method: 'DELETE',
-    path: buildRoutePath('/users/:id'),
+    path: buildRoutePath(`/${resource}/:id`),
     handler: (req, res) => {
       const { id } = req.params
 
-      database.delete('users', id)
+      database.delete(resource, id)
 
       return res.writeHead(204).end()
     },
