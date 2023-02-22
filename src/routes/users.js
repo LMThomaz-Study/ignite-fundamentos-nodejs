@@ -4,7 +4,7 @@ import { buildRoutePath } from '../utils/build-route-path.js'
 
 const database = new Database()
 
-const resource = resource
+const resource = 'users'
 
 export const routesUsers = [
   {

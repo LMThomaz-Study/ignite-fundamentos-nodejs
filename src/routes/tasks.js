@@ -1,4 +1,6 @@
+import { parse } from 'csv'
 import { randomUUID } from 'node:crypto'
+import { readFile } from 'node:fs/promises'
 import { Database } from '../database.js'
 import { buildRoutePath } from '../utils/build-route-path.js'
 
@@ -42,6 +44,32 @@ export const tasksTasks = [
       }
 
       database.insert(resource, task)
+
+      return res.writeHead(201).end()
+    },
+  },
+  {
+    method: 'POST',
+    path: buildRoutePath(`/${resource}/csv`),
+    handler: async (req, res) => {
+      const uriCSV = new URL('../../tasks.csv', import.meta.url)
+
+      const fileParsed = parse(await readFile(uriCSV, 'utf-8'), {
+        from_line: 2,
+      })
+
+      for await (const [title, description] of fileParsed) {
+        const task = {
+          id: randomUUID(),
+          title,
+          description,
+          completed_at: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+        }
+
+        database.insert(resource, task)
+      }
 
       return res.writeHead(201).end()
     },
